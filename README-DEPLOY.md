@@ -195,3 +195,5 @@ sementara sistem ini tidak bisa mengembalikan akun tersebut. Pertimbangkan
 risiko ini sebelum mengoperasikan website secara publik — kode di sini
 hanya menjalankan alur setoran/review/bayar, bukan menghilangkan risiko
 tersebut.
+
+<!-- Redeploy 2026-10-30: env DATABASE_URL (Neon) + ADMIN_KEY + SESSION_SECRET sudah terpasang di Vercel, deployment ini memakai env tersebut. -->

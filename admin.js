@@ -238,9 +238,9 @@ async function renderReviews(page) {
       <section class="admin-panel"><div class="admin-panel-head admin-head-stack"><div><h2>Daftar email setoran ${esc(member ? member.name : "")}</h2><p>Setiap email merupakan satu entri, lengkap dengan kategori dan statusnya.</p></div><button class="admin-outline" id="btn-reset">Reset Filter</button></div>
       <div class="admin-controls"><label class="admin-search">${ico("search")}<input id="detail-search" value="${esc(reviewQuery)}" placeholder="Cari alamat email atau ID pengajuan..."></label><label class="admin-filter-wrap">Status<select id="detail-stage">${["Semua", ...STAGES].map((st) => `<option ${reviewFilter === st ? "selected" : ""}>${st}</option>`).join("")}</select></label></div>
       <div id="admin-review-body">
-        <div class="admin-selection-bar"><div><strong>${picked.size} email dipilih</strong><span> · Hanya dari anggota ini</span></div><div class="admin-select-actions"><button class="admin-outline" id="btn-clear-pick">Batal pilih</button><button class="admin-primary" id="btn-bulk" ${picked.size ? "" : "disabled"}>Ubah Terpilih (${picked.size})</button></div></div>
-        <div class="admin-table-scroll"><table class="admin-data-table review-emails-table"><thead><tr><th><input type="checkbox" id="pick-all" ${matches.length > 0 && selectedVisible === matches.length ? "checked" : ""}></th><th>Email Setoran / Waktu</th><th>Kategori</th><th>Status Proses</th><th>Aksi</th></tr></thead><tbody>${matches.map((e) => `<tr><td><input type="checkbox" data-pick="${e.id}" ${picked.has(e.id) ? "checked" : ""}></td><td><b class="review-email-name">${esc(e.email_address)}</b><small>${esc(e.id)} • ${fmtDate(e.created_at)} WIB</small>${e.member_note ? `<small style="color:#8eb7ff">Ada catatan anggota</small>` : ``}</td><td>${qualityTag(e.quality)}</td><td>${stageTag(e.stage)}</td><td><button class="admin-small-btn" data-detail="${e.id}">Periksa / Ubah</button></td></tr>`).join("") || `<tr><td colspan="5" class="admin-empty">Tidak ada email sesuai filter untuk anggota ini.</td></tr>`}</tbody></table></div>
-        <p class="admin-table-hint">Tiap email setoran memiliki ID transaksi dan terkait secara permanen dengan ID anggota. Pilihan massal tidak mencakup anggota lain.</p>
+        <div class="admin-selection-bar"><div><strong>${picked.size} email dipilih</strong><span> · Hanya dari anggota ini</span></div><div class="admin-select-actions"><button class="admin-outline" id="btn-clear-pick">Batal pilih</button><button class="admin-outline" id="btn-copy-all-emails">Salin Semua Email</button><button class="admin-primary" id="btn-bulk" ${picked.size ? "" : "disabled"}>Ubah Terpilih (${picked.size})</button></div></div>
+        <div class="admin-table-scroll"><table class="admin-data-table review-emails-table"><thead><tr><th><input type="checkbox" id="pick-all" ${matches.length > 0 && selectedVisible === matches.length ? "checked" : ""}></th><th>Email Setoran / Waktu</th><th>Kategori</th><th>Status Proses</th><th>Aksi</th></tr></thead><tbody>${matches.map((e) => `<tr><td><input type="checkbox" data-pick="${e.id}" ${picked.has(e.id) ? "checked" : ""}></td><td><b class="review-email-name">${esc(e.email_address)}</b><small>${esc(e.id)} • ${fmtDate(e.created_at)} WIB</small>${e.member_note ? `<span style="display:block;color:#cdd9f2;font-size:11px;line-height:1.6;white-space:pre-wrap;word-break:break-all;margin-top:4px">Catatan: ${esc(e.member_note)}</span>` : `<small style="color:#7f93b2">Tanpa catatan</small>`}</td><td>${qualityTag(e.quality)}</td><td>${stageTag(e.stage)}</td><td><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="admin-small-btn" data-copy-email="${esc(e.email_address)}">Salin Email</button>${e.member_note ? `<button class="admin-small-btn" data-copy-note="${e.id}">Salin Catatan</button>` : ``}<button class="admin-small-btn" data-detail="${e.id}">Periksa / Ubah</button></div></td></tr>`).join("") || `<tr><td colspan="5" class="admin-empty">Tidak ada email sesuai filter untuk anggota ini.</td></tr>`}</tbody></table></div>
+        <p class="admin-table-hint">Tiap email setoran memiliki ID transaksi dan terkait secara permanen dengan ID anggota. Pilihan massal tidak mencakup anggota lain. Tombol Salin Semua Email menyalin email yang sedang tampil (sesuai pencarian/filter), satu per baris, hanya email saja tanpa password.</p>
       </div></section>`;
     $("#btn-back").addEventListener("click", () => { picked.clear(); reviewMemberId = null; reviewQuery = ""; reviewFilter = "Semua"; render(); });
     $("#btn-reset").addEventListener("click", () => { picked.clear(); reviewQuery = ""; reviewFilter = "Semua"; render(); });
@@ -251,6 +251,22 @@ async function renderReviews(page) {
     $("#pick-all").addEventListener("change", (e) => { matches.forEach((m) => e.target.checked ? picked.add(m.id) : picked.delete(m.id)); render(); });
     page.querySelectorAll("[data-pick]").forEach((c) => c.addEventListener("change", (e) => { e.target.checked ? picked.add(c.dataset.pick) : picked.delete(c.dataset.pick); render(); }));
     page.querySelectorAll("[data-detail]").forEach((b) => b.addEventListener("click", () => openDetailModal(all.find((x) => x.id === b.dataset.detail))));
+    page.querySelectorAll("[data-copy-email]").forEach((b) => b.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copyEmail); showToast("Email disalin."); }
+      catch { showToast("Gagal menyalin otomatis. Salin manual dari tabel."); }
+    }));
+    page.querySelectorAll("[data-copy-note]").forEach((b) => b.addEventListener("click", async () => {
+      const row = all.find((x) => x.id === b.dataset.copyNote);
+      if (!row || !row.member_note) { showToast("Tidak ada catatan untuk entri ini."); return; }
+      try { await navigator.clipboard.writeText(row.member_note); showToast("Catatan anggota disalin."); }
+      catch { showToast("Gagal menyalin otomatis. Buka Periksa / Ubah lalu salin manual."); }
+    }));
+    const btnCopyAll = $("#btn-copy-all-emails");
+    if (btnCopyAll) btnCopyAll.addEventListener("click", async () => {
+      if (!matches.length) { showToast("Tidak ada email untuk disalin."); return; }
+      try { await navigator.clipboard.writeText(matches.map((m) => m.email_address).join("\n")); showToast(`${matches.length} email disalin (satu per baris).`); }
+      catch { showToast("Gagal menyalin otomatis. Salin manual dari tabel."); }
+    });
     return;
   }
   const { people, totals } = await api("admin-review-people");
@@ -277,7 +293,7 @@ async function renderReviews(page) {
 function openDetailModal(r) {
   openModal(`<div class="admin-modal-head"><div><span class="admin-eyebrow">DETAIL PENGAJUAN</span><h2>${esc(r.email_address)}</h2><p>${esc(r.id)} · ${esc(r.member_name || "")} · ${fmtDate(r.created_at)} WIB</p></div><button class="ghost-icon" onclick="closeModal()">${ico("close")}</button></div>
     <div class="admin-mini-info"><div><small>Status saat ini</small>${stageTag(r.stage)}</div><div><small>Kategori sekarang</small>${qualityTag(r.quality)}</div></div>
-    <div class="admin-modal-form"><label>Catatan anggota (hanya admin yang melihat ini; bisa berisi password akun)<textarea class="field" rows="3" readonly placeholder="Tidak ada catatan dari anggota.">${esc(r.member_note || "")}</textarea></label><label>Kategori hasil pemeriksaan<select class="field" id="adm-quality">${QUALITIES.map((q) => `<option ${r.quality === q ? "selected" : ""}>${q}</option>`).join("")}</select></label><label>Status proses<select class="field" id="adm-stage">${STAGES.map((st) => `<option ${r.stage === st ? "selected" : ""}>${st}</option>`).join("")}</select></label><label>Catatan / alasan perubahan<textarea class="field" id="adm-reason" rows="3" placeholder="Contoh: status diperbarui setelah pemeriksaan.">${esc(r.admin_note || "")}</textarea></label></div>
+    <div class="admin-modal-form"><label>Catatan anggota (hanya admin yang melihat ini; bisa berisi password akun)<textarea class="field" rows="3" readonly placeholder="Tidak ada catatan dari anggota.">${esc(r.member_note || "")}</textarea></label>${r.member_note ? `<button class="admin-outline" type="button" id="btn-copy-note">Salin Catatan</button>` : ``}<label>Kategori hasil pemeriksaan<select class="field" id="adm-quality">${QUALITIES.map((q) => `<option ${r.quality === q ? "selected" : ""}>${q}</option>`).join("")}</select></label><label>Status proses<select class="field" id="adm-stage">${STAGES.map((st) => `<option ${r.stage === st ? "selected" : ""}>${st}</option>`).join("")}</select></label><label>Catatan / alasan perubahan<textarea class="field" id="adm-reason" rows="3" placeholder="Contoh: status diperbarui setelah pemeriksaan.">${esc(r.admin_note || "")}</textarea></label></div>
     <div class="admin-soft-note">Saldo dihitung hanya saat pengajuan dinyatakan Diterima. Perubahan tersimpan di database dan anggota menerima notifikasi.</div>
     <div class="admin-modal-actions"><button class="admin-outline" onclick="closeModal()">Batal</button><button class="admin-primary" id="btn-save-detail">Simpan Perubahan</button></div>`);
   $("#btn-save-detail").addEventListener("click", async () => {
@@ -288,6 +304,11 @@ function openDetailModal(r) {
       await api("admin-review", { method: "POST", body: { ids: [r.id], stage, quality, admin_note: note } });
       closeModal(); showToast(`${r.id} berhasil diperbarui.`); render();
     } catch (e) { showToast(e.message); }
+  });
+  const btnCopyNote = $("#btn-copy-note");
+  if (btnCopyNote) btnCopyNote.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(r.member_note); showToast("Catatan anggota disalin."); }
+    catch { showToast("Gagal menyalin otomatis. Salin manual dari kolom catatan."); }
   });
 }
 function openBulkModal() {

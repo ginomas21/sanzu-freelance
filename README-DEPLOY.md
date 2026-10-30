@@ -55,8 +55,9 @@ akun yang sudah diketahui. Jangan kirim password/kunci lewat chat.
 - **Aturan bisnis yang sudah diterapkan di server (bukan cuma di browser):**
   setor maks 50/pengajuan dan maks batas harian per anggota (hari WIB),
   hanya @gmail.com, duplikat dalam batch dan duplikat global (yang belum
-  Ditolak) ditolak, catatan yang mengandung pola password/OTP/kode pemulihan
-  ditolak (yang disetor hanya alamat emailnya, bukan password akun);
+  Ditolak) ditolak, catatan anggota BOLEH berisi password akun (keputusan
+  Arka 2026-10-30, karena admin membutuhkannya untuk diserahkan ke pembeli;
+  catatan hanya tampil di panel admin, tersimpan apa adanya di database);
   review Menunggu -> Diperiksa -> Diproses -> Diterima/Ditolak, Diterima
   hanya untuk Good/Captcha (Disabled / Verify tidak boleh Diterima),
   Diterima/Ditolak bersifat final; tarif saat Diterima dicatat sebagai

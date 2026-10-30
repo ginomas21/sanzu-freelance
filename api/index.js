@@ -32,7 +32,7 @@ import {
 } from "../lib/db.js";
 import {
   EMAIL_RE, GMAIL_RE, ROOMS, STAGES, QUALITIES, validateSubmissionBatch,
-  containsCredentialPattern, feeForMethod, calcBalance, canReview, maskNumber,
+  feeForMethod, calcBalance, canReview, maskNumber,
   generateReferralCode, referralProgress, canClaim, validateProfile,
   validateWithdraw, validateSettings,
 } from "../lib/logic.js";
@@ -243,9 +243,10 @@ export default async function handler(req, res) {
       const rawEmails = Array.isArray(body.emails) ? body.emails : String(body.emails || body.bulk || "");
       const v = validateSubmissionBatch(rawEmails, settings.daily_limit);
       if (v.error) return bad(res, 400, v.error);
+      // Catatan anggota boleh berisi password akun (keputusan Arka 2026-10-30):
+      // admin membutuhkannya untuk menyerahkan akun ke pembeli. Catatan ini
+      // hanya tampil di panel admin, tidak di halaman anggota lain.
       const note = String(body.member_note || "");
-      if (containsCredentialPattern(note))
-        return bad(res, 400, "Jangan masukkan password, OTP, atau kode pemulihan. Yang disetor hanya alamat emailnya.");
       const today = await countTodaySubmissions(u.id);
       if (today + v.emails.length > settings.daily_limit)
         return bad(res, 400, `Melebihi batas harian ${settings.daily_limit} alamat (hari ini sudah ${today}).`);

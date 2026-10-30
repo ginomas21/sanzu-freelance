@@ -1,20 +1,16 @@
 <!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SanzuFreelance — Dashboard Anggota</title>
+<meta name="description" content="SanzuFreelance — dashboard anggota: setor pengajuan, pantau pemeriksaan, tarik saldo, dan referral.">
 <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div id="auth-view" class="center" style="display:none">
-  <div class="brand" style="text-align:center">Sanzu<span>Freelance</span><div class="brand-sub">DIGITAL WORKSPACE</div></div>
+</head><body>
+<!-- Layar login/daftar (tidak ada di demo; demo berasumsi sudah masuk).
+     Setelah login, tampil shell demo di bawah ini. -->
+<div class="auth-wrap" id="auth-view" style="display:none">
   <div class="auth-card">
-    <div class="auth-tabs">
-      <button id="tab-login" class="active">Masuk</button>
-      <button id="tab-register">Daftar</button>
-    </div>
-    <div id="auth-msg"></div>
+    <div class="auth-brand"><img class="brand-mark" src="" id="auth-logo" alt="Logo SanzuFreelance" style="width:43px;height:54px"><div><div class="brand-title">SanzuFreelance</div><div class="brand-sub">DIGITAL WORKSPACE</div></div></div>
+    <div class="auth-tabs"><button id="tab-login" class="active">Masuk</button><button id="tab-register">Daftar</button></div>
+    <div id="auth-msg" class="auth-msg"></div>
     <form id="login-form">
       <div class="form-field"><label for="login-email">Email</label><input class="field" id="login-email" type="email" required placeholder="nama@email.com"></div>
       <div class="form-field"><label for="login-password">Password</label><input class="field" id="login-password" type="password" required placeholder="Minimal 8 karakter"></div>
@@ -28,22 +24,13 @@
       <button class="btn btn-primary" style="width:100%;justify-content:center" type="submit">Daftar</button>
       <p class="help">Akun baru berstatus Menunggu sampai disetujui admin. Setelah disetujui, kamu bisa setor dan menarik saldo.</p>
     </form>
-    <p class="small muted" style="text-align:center;margin-top:16px">Admin? Buka <a href="/admin">/admin</a></p>
+    <p class="tiny-muted" style="text-align:center;margin-top:16px">Admin? Buka <a href="/admin" style="color:#8eb7ff">/admin</a></p>
   </div>
 </div>
 
-<div id="app-view" class="app" style="display:none">
-  <aside class="sidebar">
-    <div class="brand">Sanzu<span>Freelance</span><div class="brand-sub">DIGITAL WORKSPACE</div></div>
-    <div id="side-nav"></div>
-    <div class="side-bottom"><div id="side-user"></div><button class="btn btn-outline btn-sm" id="btn-logout" style="margin-top:10px">Keluar</button></div>
-  </aside>
-  <div class="content">
-    <header class="topbar"><h1 class="top-heading" id="top-heading">Beranda</h1><span class="small muted" id="top-state"></span></header>
-    <main class="page" id="page"></main>
-    <nav class="mobile-bar" id="mobile-nav"></nav>
-  </div>
-</div>
+<!-- Shell demo anggota: sidebar + topbar + mobile bar + modal + toast.
+     Tombol switcher Anggota/Admin dari demo SENGAJA tidak dirender (peran
+     dipisah lewat login; admin tidak bisa menyamar jadi anggota dari sini). -->
+<div class="app" id="app-view" style="display:none"><aside class="sidebar" id="sidebar"></aside><div class="content"><header class="topbar"><div class="top-left"><div class="eyebrow" id="top-eyebrow">SANZU WORKSPACE</div><div class="top-heading" id="top-heading">Beranda</div></div><div class="mobile-brand" id="mobile-brand"></div><div class="top-right"><button class="ghost-icon" id="btn-bell" aria-label="Buka pemberitahuan"></button></div></header><main class="page" id="page"></main></div></div><nav class="mobile-bar" id="mobile-nav"></nav><div id="modal-root"></div><div id="toast-root"></div>
 <script src="member.js"></script>
-</body>
-</html>
+</body></html>

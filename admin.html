@@ -39,13 +39,14 @@
 <!-- Shell dashboard: struktur yang sama dengan file demo admin
      (sidebar + topbar + mobile bar + modal + toast). Yang dihilangkan:
      tombol switcher Anggota/Admin (di website beneran peran dipisah lewat
-     login yang berbeda) dan logo base64 raksasa (brand cukup teks). -->
+     login yang berbeda); logo brand demo (konstanta LOGO) dirender oleh
+     admin.js di sidebar dan mobile-brand. -->
 <div class="app" id="app-view" style="display:none">
   <aside class="sidebar" id="sidebar"></aside>
   <div class="content">
     <header class="topbar">
       <div class="top-left"><div class="eyebrow" id="top-eyebrow">SANZU WORKSPACE</div><div class="top-heading" id="top-heading">Beranda</div></div>
-      <div class="mobile-brand"><strong>Sanzu<span>Freelance</span></strong></div>
+      <div class="mobile-brand" id="mobile-brand"><strong>Sanzu<span>Freelance</span></strong></div>
       <div class="top-right"><button class="admin-outline" id="btn-logout">Keluar</button></div>
     </header>
     <main class="page" id="page"></main>

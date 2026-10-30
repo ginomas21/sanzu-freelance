@@ -1,0 +1,1 @@
+{"dependencies":{"pg":"^8.13.1"},"description":"SanzuFreelance — dashboard setoran anggota dengan review admin, saldo, penarikan manual, dan referral. Satu dispatcher Vercel + PostgreSQL.","name":"sanzu-freelance","private":true,"type":"module","version":"1.0.0"}

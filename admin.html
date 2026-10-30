@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SanzuFreelance — Dashboard Admin</title>
+<meta name="description" content="SanzuFreelance — dashboard admin: pemeriksaan, anggota, penarikan, referral, dan pengaturan.">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<!-- Login admin: dari database (email+password akun admin), BUKAN ADMIN_KEY.
+     ADMIN_KEY hanya dipakai sekali di panel "Buat admin pertama" di bawah. -->
+<div class="page" id="login-view" style="display:none;max-width:520px">
+  <div class="admin-page-title"><div><div class="admin-eyebrow">SANZU WORKSPACE</div><h1>Dashboard Admin</h1><p>Masuk dengan akun admin dari database.</p></div></div>
+  <div id="login-msg"></div>
+  <section class="admin-panel">
+    <div class="admin-panel-head"><h2>Masuk Admin</h2></div>
+    <form id="admin-login-form" class="admin-modal-form">
+      <label>Email admin<input class="field" id="admin-email" type="email" required placeholder="admin@email.com"></label>
+      <label>Password<input class="field" id="admin-password" type="password" required placeholder="Password akun admin"></label>
+      <button class="admin-primary" type="submit">Masuk</button>
+    </form>
+  </section>
+  <section class="admin-panel">
+    <div class="admin-panel-head"><h2>Buat Admin Pertama</h2><span class="admin-count">Hanya sekali</span></div>
+    <p class="admin-muted">Form ini hanya berhasil bila belum ada akun admin sama sekali dan ADMIN_KEY di server benar. Setelah admin pertama jadi, form ini tidak bisa dipakai lagi — login selanjutnya lewat form di atas.</p>
+    <div id="setup-msg"></div>
+    <form id="admin-setup-form" class="admin-modal-form">
+      <label>ADMIN_KEY (dari env server, tidak disimpan di browser)<input class="field" id="setup-key" type="password" required></label>
+      <label>Nama admin<input class="field" id="setup-name" value="Admin" required></label>
+      <label>Email admin<input class="field" id="setup-email" type="email" required placeholder="admin@email.com"></label>
+      <label>Password admin (minimal 8 karakter)<input class="field" id="setup-password" type="password" required></label>
+      <button class="admin-primary" type="submit">Buat Admin Pertama</button>
+    </form>
+  </section>
+  <p class="footer-meta">Halaman anggota ada di <a href="/">beranda</a>.</p>
+</div>
+
+<!-- Shell dashboard: struktur yang sama dengan file demo admin
+     (sidebar + topbar + mobile bar + modal + toast). Yang dihilangkan:
+     tombol switcher Anggota/Admin (di website beneran peran dipisah lewat
+     login yang berbeda) dan logo base64 raksasa (brand cukup teks). -->
+<div class="app" id="app-view" style="display:none">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="content">
+    <header class="topbar">
+      <div class="top-left"><div class="eyebrow" id="top-eyebrow">SANZU WORKSPACE</div><div class="top-heading" id="top-heading">Beranda</div></div>
+      <div class="mobile-brand"><strong>Sanzu<span>Freelance</span></strong></div>
+      <div class="top-right"><button class="admin-outline" id="btn-logout">Keluar</button></div>
+    </header>
+    <main class="page" id="page"></main>
+  </div>
+</div>
+<nav class="mobile-bar" id="mobile-nav"></nav>
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+<script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SanzuFreelance — Dashboard Anggota</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="auth-view" class="center" style="display:none">
+  <div class="brand" style="text-align:center">Sanzu<span>Freelance</span><div class="brand-sub">DIGITAL WORKSPACE</div></div>
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button id="tab-login" class="active">Masuk</button>
+      <button id="tab-register">Daftar</button>
+    </div>
+    <div id="auth-msg"></div>
+    <form id="login-form">
+      <div class="form-field"><label for="login-email">Email</label><input class="field" id="login-email" type="email" required placeholder="nama@email.com"></div>
+      <div class="form-field"><label for="login-password">Password</label><input class="field" id="login-password" type="password" required placeholder="Minimal 8 karakter"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" type="submit">Masuk</button>
+    </form>
+    <form id="register-form" style="display:none">
+      <div class="form-field"><label for="reg-name">Nama tampilan</label><input class="field" id="reg-name" required placeholder="Nama kamu"></div>
+      <div class="form-field"><label for="reg-email">Email</label><input class="field" id="reg-email" type="email" required placeholder="nama@email.com"></div>
+      <div class="form-field"><label for="reg-password">Password</label><input class="field" id="reg-password" type="password" required placeholder="Minimal 8 karakter"></div>
+      <div class="form-field"><label for="reg-ref">Kode referral (opsional)</label><input class="field" id="reg-ref" placeholder="Mis. SF-XXXXXX — isi dari link referral temanmu"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" type="submit">Daftar</button>
+      <p class="help">Akun baru berstatus Menunggu sampai disetujui admin. Setelah disetujui, kamu bisa setor dan menarik saldo.</p>
+    </form>
+    <p class="small muted" style="text-align:center;margin-top:16px">Admin? Buka <a href="/admin">/admin</a></p>
+  </div>
+</div>
+
+<div id="app-view" class="app" style="display:none">
+  <aside class="sidebar">
+    <div class="brand">Sanzu<span>Freelance</span><div class="brand-sub">DIGITAL WORKSPACE</div></div>
+    <div id="side-nav"></div>
+    <div class="side-bottom"><div id="side-user"></div><button class="btn btn-outline btn-sm" id="btn-logout" style="margin-top:10px">Keluar</button></div>
+  </aside>
+  <div class="content">
+    <header class="topbar"><h1 class="top-heading" id="top-heading">Beranda</h1><span class="small muted" id="top-state"></span></header>
+    <main class="page" id="page"></main>
+    <nav class="mobile-bar" id="mobile-nav"></nav>
+  </div>
+</div>
+<script src="member.js"></script>
+</body>
+</html>
